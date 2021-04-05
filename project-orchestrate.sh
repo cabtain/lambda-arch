@@ -20,8 +20,9 @@ docker exec kafka-iot kafka-topics --create --topic iot-data-event --partitions 
 # Create our folders on Hadoop file system and total permission to those
 docker exec namenode hdfs dfs -mkdir /lambda-arch
 docker exec namenode hdfs dfs -mkdir /lambda-arch/checkpoint
+docker exec namenode hdfs dfs -mkdir /lambda-arch/iot-data-parque
 docker exec namenode hdfs dfs -chmod -R 777 /lambda-arch
 docker exec namenode hdfs dfs -chmod -R 777 /lambda-arch/checkpoint
-
+docker exec namenode hdfs dfs -chmod -R 777 /lambda-arch/iot-data-parque
 
 
