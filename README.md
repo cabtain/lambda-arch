@@ -95,3 +95,93 @@ http://localhost:50075
 
 ## That's all. Leave a star if this project has helped you!
 
+### git clone
+
+$ sudo su -
+$ git clone https://github.com/cabtain/lambda-arch.git
+$ cd lambda-arch/
+
+Set the KAFKA_ADVERTISED_LISTENERS with your IP(ex. Google GCP internal IP) in the docker-compose.yml
+
+### install maven & build
+
+$ apt install maven
+$ mvn package
+
+
+### install docker-compose & run
+
+$ snap install docker
+$ docker-compose -p lambda up --build
+
+Wait all services be up and running, then launch another terminal and run below
+
+$ ./project-orchestrate.sh
+
+### Run realtime job
+
+$ docker exec spark-master /spark/bin/spark-submit --class com.apssouza.iot.processor.StreamingProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar
+
+### Run the traffic producer
+
+$ java -jar iot-kafka-producer/target/iot-kafka-producer-1.0.0.jar
+
+### Run the service layer (Web app)
+
+$ java -jar iot-springboot-dashboard/target/iot-springboot-dashboard-1.0.0.jar
+
+Access the dashboard with the data http://35.197.125.147:3000/
+
+### Run batch job
+
+$ docker exec spark-master /spark/bin/spark-submit --class com.apssouza.iot.processor.BatchProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar
+
+http://34.83.84.224:3000/
+![image2021-4-6_12-41-14](https://user-images.githubusercontent.com/1121859/118780653-3c069880-b8c7-11eb-8612-b54354dca9ad.png)
+
+http://34.83.84.224:8080/
+
+
+![image2021-4-6_12-42-20](https://user-images.githubusercontent.com/1121859/118780764-56d90d00-b8c7-11eb-840e-54743d910e05.png)
+
+http://34.83.84.224:8081/
+
+![image2021-4-6_12-43-4](https://user-images.githubusercontent.com/1121859/118780839-6eb09100-b8c7-11eb-888e-82c641393951.png)
+
+http://34.83.84.224:4040/jobs/
+
+![image2021-4-6_12-44-13](https://user-images.githubusercontent.com/1121859/118780952-89830580-b8c7-11eb-9fe2-648ce2624849.png)
+
+http://34.83.84.224:4040/streaming/batch/?id=1617680605000
+
+![image2021-4-6_12-45-1](https://user-images.githubusercontent.com/1121859/118781094-a6b7d400-b8c7-11eb-96c7-a1de5cdfee99.png)
+
+http://34.83.84.224:4040/jobs/job/?id=485
+
+![image2021-4-6_12-46-23](https://user-images.githubusercontent.com/1121859/118781203-c0f1b200-b8c7-11eb-92de-8631c8cecbe0.png)
+
+http://34.83.84.224:50070/
+
+![image2021-4-6_12-50-19](https://user-images.githubusercontent.com/1121859/118781268-d8309f80-b8c7-11eb-97a8-305c2fb902e1.png)
+
+http://34.83.84.224:50070/explorer.html#/lambda-arch/iot-data-parque
+
+![image2021-4-6_12-51-17](https://user-images.githubusercontent.com/1121859/118781346-eda5c980-b8c7-11eb-8e96-145ac512b9f5.png)
+
+http://34.83.84.224:50070/dfshealth.html#tab-datanode
+
+![image2021-4-6_12-51-55](https://user-images.githubusercontent.com/1121859/118781408-01513000-b8c8-11eb-9076-902671c15892.png)
+
+http://34.83.84.224:50075/datanode.html
+
+![image2021-4-6_12-52-26](https://user-images.githubusercontent.com/1121859/118781502-175ef080-b8c8-11eb-89ca-e8d12ac087c4.png)
+
+
+
+
+
+
+
+
+
+
