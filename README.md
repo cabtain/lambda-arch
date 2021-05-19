@@ -97,44 +97,44 @@ http://localhost:50075
 
 ### git clone
 
-$ sudo su -
-$ git clone https://github.com/cabtain/lambda-arch.git
-$ cd lambda-arch/
+`$ sudo su -`
+`$ git clone https://github.com/cabtain/lambda-arch.git`
+`$ cd lambda-arch/`
 
 Set the KAFKA_ADVERTISED_LISTENERS with your IP(ex. Google GCP internal IP) in the docker-compose.yml
 
 ### install maven & build
 
-$ apt install maven
-$ mvn package
+`$ apt install maven`
+`$ mvn package`
 
 
 ### install docker-compose & run
 
-$ snap install docker
-$ docker-compose -p lambda up --build
+`$ snap install docker`
+`$ docker-compose -p lambda up --build`
 
 Wait all services be up and running, then launch another terminal and run below
 
-$ ./project-orchestrate.sh
+`$ ./project-orchestrate.sh`
 
 ### Run realtime job
 
-$ docker exec spark-master /spark/bin/spark-submit --class com.apssouza.iot.processor.StreamingProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar
+`$ docker exec spark-master /spark/bin/spark-submit --class com.apssouza.iot.processor.StreamingProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar`
 
 ### Run the traffic producer
 
-$ java -jar iot-kafka-producer/target/iot-kafka-producer-1.0.0.jar
+`$ java -jar iot-kafka-producer/target/iot-kafka-producer-1.0.0.jar`
 
 ### Run the service layer (Web app)
 
-$ java -jar iot-springboot-dashboard/target/iot-springboot-dashboard-1.0.0.jar
+`$ java -jar iot-springboot-dashboard/target/iot-springboot-dashboard-1.0.0.jar`
 
 Access the dashboard with the data http://35.197.125.147:3000/
 
 ### Run batch job
 
-$ docker exec spark-master /spark/bin/spark-submit --class com.apssouza.iot.processor.BatchProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar
+`$ docker exec spark-master /spark/bin/spark-submit --class com.apssouza.iot.processor.BatchProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar`
 
 http://34.83.84.224:3000/
 ![image2021-4-6_12-41-14](https://user-images.githubusercontent.com/1121859/118780653-3c069880-b8c7-11eb-8612-b54354dca9ad.png)
