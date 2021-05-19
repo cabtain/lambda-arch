@@ -98,7 +98,9 @@ http://localhost:50075
 ### git clone
 
 `$ sudo su -`
+
 `$ git clone https://github.com/cabtain/lambda-arch.git`
+
 `$ cd lambda-arch/`
 
 Set the KAFKA_ADVERTISED_LISTENERS with your IP(ex. Google GCP internal IP) in the docker-compose.yml
@@ -106,12 +108,14 @@ Set the KAFKA_ADVERTISED_LISTENERS with your IP(ex. Google GCP internal IP) in t
 ### install maven & build
 
 `$ apt install maven`
+
 `$ mvn package`
 
 
 ### install docker-compose & run
 
 `$ snap install docker`
+
 `$ docker-compose -p lambda up --build`
 
 Wait all services be up and running, then launch another terminal and run below
