@@ -1,15 +1,6 @@
 /**
-* @author apssouza22
+* 
 **/
-var map;
-function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 6,
-      center: {lat: 34.36, lng: -96.263},
-      mapTypeId: 'satellite'
-    });
-}
-
 
  var totalTrafficChartData={
             labels : ["Vehicle"],
@@ -71,11 +62,6 @@ jQuery(document).ready(function() {
         stompClient.subscribe("/topic/trafficData", function(data) {
             var dataList = data.body;
             var resp=jQuery.parseJSON(dataList);
-            points = resp.heatMap.map(e => new google.maps.LatLng(e.latitude, e.longitude))
-            new google.maps.visualization.HeatmapLayer({
-              data: points,
-              map: map
-            });
 
             //Grid Box total
             var gridBoxTotal='';
