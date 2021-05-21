@@ -1,6 +1,17 @@
 //Create keyspace
 CREATE KEYSPACE IF NOT EXISTS TrafficKeySpace WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};
 
+//Drop table
+DROP TABLE IF EXISTS TrafficKeySpace.Total_Traffic;
+DROP TABLE IF EXISTS TrafficKeySpace.Window_Traffic;
+DROP TABLE IF EXISTS TrafficKeySpace.Poi_Traffic;
+DROP TABLE IF EXISTS TrafficKeySpace.Heat_Map;
+DROP TABLE IF EXISTS TrafficKeySpace.Heat_Map_Batch;
+DROP TABLE IF EXISTS TrafficKeySpace.Poi_traffic_batch;
+DROP TABLE IF EXISTS TrafficKeySpace.Total_Traffic_batch;
+DROP TABLE IF EXISTS TrafficKeySpace.Window_Traffic_batch;
+
+
 //Create table
 CREATE TABLE TrafficKeySpace.Total_Traffic (routeId text ,  vehicleType text,  totalCount bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
 CREATE TABLE TrafficKeySpace.Window_Traffic (routeId text , vehicleType text,  totalCount bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
