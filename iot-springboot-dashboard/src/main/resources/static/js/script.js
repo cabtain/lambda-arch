@@ -3,29 +3,22 @@
 **/
 
  var totalTrafficChartData={
-            labels : ["Vehicle"],
+            labels : ["Type"],
             datasets : [{
-                label : "Route",
+                label : "Equipment",
                 data : [1]
             }
            ]
         };
 
 var route37TrafficChartData={
-            labels : ["Vehicle"],
+            labels : ["Type"],
             datasets : [{
                 data : [1]
             }
            ]
         };
 
-var poiTrafficChartData={
-            labels : ["Vehicle"],
-            datasets : [{
-                data : [1]
-            }
-           ]
-        };
 
 jQuery(document).ready(function() {
     //Charts
@@ -41,17 +34,9 @@ jQuery(document).ready(function() {
                 data: route37TrafficChartData
             });
 
-    var ctx3 = document.getElementById("poiTrafficChart").getContext("2d");
-    window.pChart = new Chart(ctx3, {
-                type: 'radar',
-                data: poiTrafficChartData
-            });
-
-
     //tables
     var totalTrafficList = jQuery("#total_traffic");
     var windowTrafficList = jQuery("#window_traffic");
-    var poiTrafficList = jQuery("#poi_traffic");
 
     //use sockjs
     var socket = new SockJS('/stomp');
@@ -63,19 +48,12 @@ jQuery(document).ready(function() {
             var dataList = data.body;
             var resp=jQuery.parseJSON(dataList);
 
-            //Grid Box total
-            var gridBoxTotal='';
-            jQuery.each(resp.heatMap, function(i,vh) {
-                 gridBoxTotal +="<tr><td>"+ vh.latitude+" / "+vh.longitude+"</td><td>"+vh.totalCount+"</td></tr>";
-            });
-            jQuery("#gridBoxContent tbody").html(gridBoxTotal);
-
             //Total traffic
             var totalOutput='';
             jQuery.each(resp.totalTraffic, function(i,vh) {
                  totalOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
             });
-            var t_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Route</th><th>Vehicle</th><th>Count</th><th>Time</th></tr></thead>";
+            var t_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Time</th></tr></thead>";
             var t_tabl_end = "</table>";
             totalTrafficList.html(t_tabl_start+totalOutput+t_tabl_end);
 
@@ -84,18 +62,9 @@ jQuery(document).ready(function() {
             jQuery.each(resp.windowTraffic, function(i,vh) {
                  windowOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
             });
-            var w_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Route</th><th>Vehicle</th><th>Count</th><th>Time</th></tr></thead>";
+            var w_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Time</th></tr></thead>";
             var w_tabl_end = "</table>";
             windowTrafficList.html(w_tabl_start+windowOutput+w_tabl_end);
-
-            //POI data
-            var poiOutput='';
-            jQuery.each(resp.poiTraffic, function(i,vh) {
-                 poiOutput +="<tbody><tr><td>"+ vh.vehicleId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.distance+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
-            });
-            var p_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Vehicle Id</th><th>Vehicle</th><th>Distance</th><th>Time</th></tr></thead>";
-            var p_tabl_end = "</table>";
-            poiTrafficList.html(p_tabl_start+poiOutput+p_tabl_end);
 
             //draw total traffic chart
             drawBarChart(resp.totalTraffic,totalTrafficChartData);
@@ -105,18 +74,14 @@ jQuery(document).ready(function() {
             drawDoughnutChart(resp.totalTraffic,route37TrafficChartData);
             window.wChart.update();
 
-            //draw poi  chart
-            drawRadarChart(resp.poiTraffic,poiTrafficChartData);
-            window.pChart.update();
-
         });
     });
 });
 
 function drawBarChart(trafficDetail,trafficChartData){
     //Prepare data for total traffic chart
-    var chartLabel = [ "Bus","Large Truck",  "Private Car","Small Truck", "Taxi"];
-    var routeName = ["Route-37", "Route-82", "Route-43"];
+    var chartLabel = ["Temperature", "Current", "Voltage", "Vibration", "Level"];
+    var routeName = ["Equipment_A", "Equipment_B", "Equipment_C"];
     var chartData0 =[0,0,0,0,0], chartData1 =[0,0,0,0,0], chartData2 =[0,0,0,0,0];
 
     jQuery.each(trafficDetail, function(i,vh) {
@@ -165,7 +130,7 @@ function drawDoughnutChart(trafficDetail,trafficChartData){
     var chartData =[];
     var chartLabel = [];
     jQuery.each(trafficDetail, function(i,vh) {
-        if(vh.routeId == "Route-37"){
+        if(vh.routeId == "Equipment_A"){
             chartLabel.push(vh.vehicleType);
             chartData.push(vh.totalCount);
         }
@@ -182,46 +147,6 @@ function drawDoughnutChart(trafficDetail,trafficChartData){
       trafficChartData.datasets=pieChartData.datasets;
       trafficChartData.labels=pieChartData.labels;
 }
-
-
-function drawRadarChart(trafficDetail,trafficChartData){
-    var vTypeLabel =["Large Truck", "Small Truck"];
-    var chartLabel = [];
-    var chartData =[];
-
-    jQuery.each(trafficDetail, function(i,vh) {
-        chartData.push(vh.distance);
-        //chartLabel.push(vh.vehicleId);
-        chartLabel.push('V-'+(i+1));
-      });
-
-     var radarChartData = {
-        labels : chartLabel,
-        datasets : []
-      };
-
-      for(i=0; i<chartData.length;i++){
-         var zeroFilledArray = new Array(chartData.length);
-         for(j=0;j<chartData.length;j++){
-                zeroFilledArray[j]=0;
-            }
-         var clr = getRandomColor();
-         zeroFilledArray.splice(i,1,chartData[i]);
-          radarChartData.datasets.push(
-              {
-                label				  : chartLabel[i],
-                borderColor           : clr,
-                backgroundColor       : clr,
-                borderWidth			  : 5,
-                data                  : zeroFilledArray
-               }
-            );
-          }
-
-      //update chart
-      trafficChartData.datasets=radarChartData.datasets;
-      trafficChartData.labels=radarChartData.labels;
-    }
 
  function getRandomColor() {
     return  'rgba(' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + ('1') + ')';

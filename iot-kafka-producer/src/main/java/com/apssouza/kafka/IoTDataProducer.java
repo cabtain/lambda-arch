@@ -37,16 +37,16 @@ public class IoTDataProducer {
     /**
      * Method runs in while loop and generates random IoT data in JSON with below format.
      * <p>
-     * {"vehicleId":"52f08f03-cd14-411a-8aef-ba87c9a99997","vehicleType":"Public Transport","routeId":"route-43","latitude":",-85.583435","longitude":"38.892395","timestamp":1465471124373,"speed":80.0,"fuelLevel":28.0}
+     * {"vehicleId":"52f08f03-cd14-411a-8aef-ba87c9a99997","vehicleType":"Public Transport","routeId":"Equipment_A","latitude":",-85.583435","longitude":"38.892395","timestamp":1465471124373,"speed":80.0,"fuelLevel":28.0}
      *
      * @throws InterruptedException
      */
     private void generateIoTEvent(String topic) throws InterruptedException {
         List<String> routeList = Arrays.asList(
-                new String[]{"Route-37", "Route-43", "Route-82"}
+                new String[]{"Equipment_A", "Equipment_B", "Equipment_C"}
         );
         List<String> vehicleTypeList = Arrays.asList(
-                new String[]{"Large Truck", "Small Truck", "Private Car", "Bus", "Taxi"}
+                new String[]{"Temperature", "Current", "Voltage", "Vibration", "Level"}
         );
         Random rand = new Random();
         logger.info("Sending events");
@@ -94,13 +94,13 @@ public class IoTDataProducer {
         Random rand = new Random();
         int latPrefix = 53;
         int longPrefix = -6;
-        if (routeId.equals("Route-37")) {
+        if (routeId.equals("Equipment_A")) {
             longPrefix = -6;
         }
-        if (routeId.equals("Route-82")) {
+        if (routeId.equals("Equipment_B")) {
             longPrefix = -7;
         }
-        if (routeId.equals("Route-43")) {
+        if (routeId.equals("Equipment_C")) {
             longPrefix = -8;
         }
         Float latitude = latPrefix + rand.nextFloat();
