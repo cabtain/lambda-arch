@@ -1,4 +1,4 @@
-package com.apssouza.iot.dashboard;
+package com.sds.iot.dashboard;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -7,19 +7,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.apssouza.iot.dao.TotalTrafficDataRepository;
-import com.apssouza.iot.dao.entity.TotalTrafficData;
-import com.apssouza.iot.dao.HeatMapDataRepository;
-import com.apssouza.iot.dao.entity.HeatMapData;
+import com.sds.iot.dao.TotalTrafficDataRepository;
+import com.sds.iot.dao.entity.TotalTrafficData;
+import com.sds.iot.dao.HeatMapDataRepository;
+import com.sds.iot.dao.entity.HeatMapData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.apssouza.iot.dao.POITrafficDataRepository;
-import com.apssouza.iot.dao.WindowTrafficDataRepository;
-import com.apssouza.iot.dao.entity.POITrafficData;
-import com.apssouza.iot.dao.entity.WindowTrafficData;
+import com.sds.iot.dao.POITrafficDataRepository;
+import com.sds.iot.dao.WindowTrafficDataRepository;
+import com.sds.iot.dao.entity.POITrafficData;
+import com.sds.iot.dao.entity.WindowTrafficData;
 
 /**
  * Service class to send traffic data messages to dashboard ui at fixed interval using web-socket.

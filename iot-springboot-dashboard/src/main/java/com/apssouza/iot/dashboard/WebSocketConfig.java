@@ -1,4 +1,4 @@
-package com.apssouza.iot.dashboard;
+package com.sds.iot.dashboard;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

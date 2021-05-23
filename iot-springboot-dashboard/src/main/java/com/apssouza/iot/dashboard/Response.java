@@ -1,12 +1,12 @@
-package com.apssouza.iot.dashboard;
+package com.sds.iot.dashboard;
 
 import java.io.Serializable;
 import java.util.List;
 
-import com.apssouza.iot.dao.entity.HeatMapData;
-import com.apssouza.iot.dao.entity.POITrafficData;
-import com.apssouza.iot.dao.entity.TotalTrafficData;
-import com.apssouza.iot.dao.entity.WindowTrafficData;
+import com.sds.iot.dao.entity.HeatMapData;
+import com.sds.iot.dao.entity.POITrafficData;
+import com.sds.iot.dao.entity.TotalTrafficData;
+import com.sds.iot.dao.entity.WindowTrafficData;
 
 /**
  * Response object containing traffic details that will be sent to dashboard.

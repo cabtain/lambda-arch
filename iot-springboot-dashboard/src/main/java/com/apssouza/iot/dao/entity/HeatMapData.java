@@ -1,4 +1,4 @@
-package com.apssouza.iot.dao.entity;
+package com.sds.iot.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;

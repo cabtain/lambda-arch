@@ -1,9 +1,9 @@
-package com.apssouza.iot.dao;
+package com.sds.iot.dao;
 
 import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.stereotype.Repository;
 
-import com.apssouza.iot.dao.entity.POITrafficData;
+import com.sds.iot.dao.entity.POITrafficData;
 
 import java.util.UUID;
 
