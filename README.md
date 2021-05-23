@@ -124,7 +124,7 @@ Wait all services be up and running, then launch another terminal and run below
 
 ### Run realtime job
 
-`$ docker exec spark-master /spark/bin/spark-submit --class com.apssouza.iot.processor.StreamingProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar`
+`$ docker exec spark-master /spark/bin/spark-submit --class com.sds.iot.processor.StreamingProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar`
 
 ### Run the traffic producer
 
@@ -138,7 +138,7 @@ Access the dashboard with the data http://34.145.64.35:3000/
 
 ### Run batch job
 
-`$ docker exec spark-master /spark/bin/spark-submit --class com.apssouza.iot.processor.BatchProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar`
+`$ docker exec spark-master /spark/bin/spark-submit --class com.sds.iot.processor.BatchProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar`
 
 http://34.145.64.35:3000/
 
