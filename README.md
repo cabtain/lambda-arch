@@ -141,7 +141,10 @@ Access the dashboard with the data http://34.145.64.35:3000/
 `$ docker exec spark-master /spark/bin/spark-submit --class com.apssouza.iot.processor.BatchProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar`
 
 http://34.145.64.35:3000/
-![image2021-4-6_12-41-14](https://user-images.githubusercontent.com/1121859/118780653-3c069880-b8c7-11eb-8612-b54354dca9ad.png)
+
+![image](https://user-images.githubusercontent.com/1121859/119249928-9bbab780-bbd7-11eb-8680-98a1fae08cee.png)
+
+
 
 http://34.145.64.35:8080/
 
