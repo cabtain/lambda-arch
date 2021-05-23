@@ -1,4 +1,4 @@
-package com.apssouza.iot.processor;
+package com.sds.iot.processor;
 
 import org.apache.kafka.common.TopicPartition;
 import org.apache.spark.api.java.JavaRDD;

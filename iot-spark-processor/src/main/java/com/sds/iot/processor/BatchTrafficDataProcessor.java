@@ -1,14 +1,14 @@
-package com.apssouza.iot.processor;
+package com.sds.iot.processor;
 
-import com.apssouza.iot.dto.AggregateKey;
-import com.apssouza.iot.dto.POIData;
-import com.apssouza.iot.entity.WindowTrafficData;
-import com.apssouza.iot.util.IotDataTimestampComparator;
+import com.sds.iot.dto.AggregateKey;
+import com.sds.iot.dto.POIData;
+import com.sds.iot.entity.WindowTrafficData;
+import com.sds.iot.util.IotDataTimestampComparator;
 import com.datastax.spark.connector.japi.CassandraJavaUtil;
-import com.apssouza.iot.entity.POITrafficData;
-import com.apssouza.iot.entity.TotalTrafficData;
-import com.apssouza.iot.util.GeoDistanceCalculator;
-import com.apssouza.iot.dto.IoTData;
+import com.sds.iot.entity.POITrafficData;
+import com.sds.iot.entity.TotalTrafficData;
+import com.sds.iot.util.GeoDistanceCalculator;
+import com.sds.iot.dto.IoTData;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaPairRDD;

@@ -1,7 +1,7 @@
-package com.apssouza.iot.processor;
+package com.sds.iot.processor;
 
-import com.apssouza.iot.dto.IoTData;
-import com.apssouza.iot.dto.POIData;
+import com.sds.iot.dto.IoTData;
+import com.sds.iot.dto.POIData;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.log4j.Logger;

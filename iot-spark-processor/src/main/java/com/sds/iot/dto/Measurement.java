@@ -1,4 +1,4 @@
-package com.apssouza.iot.dto;
+package com.sds.iot.dto;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,9 +1,9 @@
-package com.apssouza.iot.processor;
+package com.sds.iot.processor;
 
-import com.apssouza.iot.dto.IoTData;
-import com.apssouza.iot.dto.POIData;
-import com.apssouza.iot.entity.POITrafficData;
-import com.apssouza.iot.util.GeoDistanceCalculator;
+import com.sds.iot.dto.IoTData;
+import com.sds.iot.dto.POIData;
+import com.sds.iot.entity.POITrafficData;
+import com.sds.iot.util.GeoDistanceCalculator;
 import com.datastax.spark.connector.japi.CassandraJavaUtil;
 import static com.datastax.spark.connector.japi.CassandraStreamingJavaUtil.javaFunctions;
 

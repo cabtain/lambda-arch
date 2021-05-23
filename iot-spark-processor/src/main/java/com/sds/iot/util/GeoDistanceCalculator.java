@@ -1,4 +1,4 @@
-package com.apssouza.iot.util;
+package com.sds.iot.util;
 
 /**
  * Class to calculate the distance between to locations on earth using coordinates (latitude and longitude).

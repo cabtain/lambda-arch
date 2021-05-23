@@ -1,4 +1,4 @@
-package com.apssouza.iot.processor;
+package com.sds.iot.processor;
 
 import static com.datastax.spark.connector.japi.CassandraStreamingJavaUtil.javaFunctions;
 
@@ -14,11 +14,11 @@ import org.apache.spark.streaming.State;
 import org.apache.spark.streaming.StateSpec;
 import org.apache.spark.streaming.api.java.JavaDStream;
 
-import com.apssouza.iot.dto.AggregateKey;
-import com.apssouza.iot.entity.WindowTrafficData;
+import com.sds.iot.dto.AggregateKey;
+import com.sds.iot.entity.WindowTrafficData;
 import com.datastax.spark.connector.japi.CassandraJavaUtil;
-import com.apssouza.iot.entity.TotalTrafficData;
-import com.apssouza.iot.dto.IoTData;
+import com.sds.iot.entity.TotalTrafficData;
+import com.sds.iot.dto.IoTData;
 
 import scala.Tuple2;
 

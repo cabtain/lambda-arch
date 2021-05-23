@@ -1,9 +1,9 @@
-package com.apssouza.iot.processor;
+package com.sds.iot.processor;
 
-import com.apssouza.iot.dto.IoTData;
-import com.apssouza.iot.dto.POIData;
-import com.apssouza.iot.util.IoTDataDeserializer;
-import com.apssouza.iot.util.PropertyFileReader;
+import com.sds.iot.dto.IoTData;
+import com.sds.iot.dto.POIData;
+import com.sds.iot.util.IoTDataDeserializer;
+import com.sds.iot.util.PropertyFileReader;
 import com.datastax.spark.connector.util.JavaApiHelper;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;

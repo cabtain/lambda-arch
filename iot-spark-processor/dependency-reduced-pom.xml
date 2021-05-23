@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.apssouza.iot</groupId>
+  <groupId>com.sds.iot</groupId>
   <artifactId>iot-spark-processor</artifactId>
   <name>IoT Spark Processor</name>
   <version>1.0.0</version>
@@ -45,7 +45,7 @@
                   <resource>reference.conf</resource>
                 </transformer>
                 <transformer>
-                  <mainClass>com.apssouza.iot.processor.StreamingProcessor</mainClass>
+                  <mainClass>com.sds.iot.processor.StreamingProcessor</mainClass>
                 </transformer>
               </transformers>
             </configuration>

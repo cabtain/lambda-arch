@@ -1,4 +1,4 @@
-package com.apssouza.iot.entity;
+package com.sds.iot.entity;
 
 import java.io.Serializable;
 import java.util.Date;

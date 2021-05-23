@@ -1,4 +1,4 @@
-package com.apssouza.iot;
+package com.sds.iot;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.streaming.Durations;

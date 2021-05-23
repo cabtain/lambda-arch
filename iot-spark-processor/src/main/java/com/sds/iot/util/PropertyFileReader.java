@@ -1,4 +1,4 @@
-package com.apssouza.iot.util;
+package com.sds.iot.util;
 
 import java.io.IOException;
 import java.io.InputStream;

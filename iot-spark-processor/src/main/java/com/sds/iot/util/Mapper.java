@@ -1,6 +1,6 @@
-package com.apssouza.iot.util;
+package com.sds.iot.util;
 
-import com.apssouza.iot.dto.IoTData;
+import com.sds.iot.dto.IoTData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
