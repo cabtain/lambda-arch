@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.apssouza.kafka</groupId>
+  <groupId>com.sds.kafka</groupId>
   <artifactId>iot-kafka-producer</artifactId>
   <name>IoT Kafka Producer</name>
   <version>1.0.0</version>
@@ -32,7 +32,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>com.apssouza.kafka.IoTDataProducer</mainClass>
+                  <mainClass>com.sds.kafka.IoTDataProducer</mainClass>
                 </transformer>
               </transformers>
             </configuration>

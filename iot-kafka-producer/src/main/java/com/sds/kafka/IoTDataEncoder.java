@@ -1,4 +1,4 @@
-package com.apssouza.kafka;
+package com.sds.kafka;
 
 import org.apache.log4j.Logger;
 

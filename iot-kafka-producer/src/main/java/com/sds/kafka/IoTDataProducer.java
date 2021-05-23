@@ -1,4 +1,4 @@
-package com.apssouza.kafka;
+package com.sds.kafka;
 
 import java.util.ArrayList;
 import java.util.Arrays;
