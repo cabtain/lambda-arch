@@ -54,7 +54,7 @@ Add spark-master to /etc/hosts pointing to localhost
 
 #### Submit a job to master
 - mvn package
-- `spark-submit --class com.apssouza.iot.processor.StreamingProcessor --master spark://spark-master:7077 iot-spark-processor/target/iot-spark-processor-1.0.0.jar`
+- `spark-submit --class com.sds.iot.processor.StreamingProcessor --master spark://spark-master:7077 iot-spark-processor/target/iot-spark-processor-1.0.0.jar`
 
 
 #### GUI
