@@ -51,18 +51,18 @@ jQuery(document).ready(function() {
             //Total traffic
             var totalOutput='';
             jQuery.each(resp.totalTraffic, function(i,vh) {
-                 totalOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
+                 totalOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+(vh.totalSum/vh.totalCount).toFixed(2)+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
             });
-            var t_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Time</th></tr></thead>";
+            var t_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Average</th><th>Time</th></tr></thead>";
             var t_tabl_end = "</table>";
             totalTrafficList.html(t_tabl_start+totalOutput+t_tabl_end);
 
             //Window traffic
             var windowOutput='';
             jQuery.each(resp.windowTraffic, function(i,vh) {
-                 windowOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
+                 windowOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+(vh.totalSum/vh.totalCount).toFixed(2)+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
             });
-            var w_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Time</th></tr></thead>";
+            var w_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Average</th><th>Time</th></tr></thead>";
             var w_tabl_end = "</table>";
             windowTrafficList.html(w_tabl_start+windowOutput+w_tabl_end);
 
@@ -87,13 +87,13 @@ function drawBarChart(trafficDetail,trafficChartData){
     jQuery.each(trafficDetail, function(i,vh) {
 
         if(vh.routeId == routeName[0]){
-            chartData0.splice(chartLabel.indexOf(vh.vehicleType),1,vh.totalCount);
+            chartData0.splice(chartLabel.indexOf(vh.vehicleType),1,(vh.totalSum/vh.totalCount).toFixed(2));
         }
         if(vh.routeId == routeName[1]){
-            chartData1.splice(chartLabel.indexOf(vh.vehicleType),1,vh.totalCount);
+            chartData1.splice(chartLabel.indexOf(vh.vehicleType),1,(vh.totalSum/vh.totalCount).toFixed(2));
         }
         if(vh.routeId == routeName[2]){
-            chartData2.splice(chartLabel.indexOf(vh.vehicleType),1,vh.totalCount);
+            chartData2.splice(chartLabel.indexOf(vh.vehicleType),1,(vh.totalSum/vh.totalCount).toFixed(2));
         }
     });
 

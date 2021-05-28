@@ -13,8 +13,8 @@ DROP TABLE IF EXISTS TrafficKeySpace.Window_Traffic_batch;
 
 
 //Create table
-CREATE TABLE TrafficKeySpace.Total_Traffic (routeId text ,  vehicleType text,  totalCount bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
-CREATE TABLE TrafficKeySpace.Window_Traffic (routeId text , vehicleType text,  totalCount bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
+CREATE TABLE TrafficKeySpace.Total_Traffic (routeId text ,  vehicleType text,  totalCount bigint,  totalSum bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
+CREATE TABLE TrafficKeySpace.Window_Traffic (routeId text , vehicleType text,  totalCount bigint,  totalSum bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
 CREATE TABLE TrafficKeySpace.Poi_Traffic(vehicleid text , vehicletype text , distance bigint,  timeStamp timestamp,PRIMARY KEY (vehicleid));
 CREATE TABLE TrafficKeySpace.Heat_Map(latitude double , longitude double , totalcount bigint,  timeStamp timestamp,PRIMARY KEY (latitude, longitude));
 CREATE TABLE TrafficKeySpace.Heat_Map_Batch(latitude double , longitude double , totalcount bigint,  timeStamp timestamp,PRIMARY KEY (latitude, longitude));

@@ -26,6 +26,8 @@ public class WindowTrafficData implements Serializable{
 	private String vehicleType;
 	@Column(value = "totalcount")
 	private long totalCount;
+	@Column(value = "totalsum")
+	private long totalSum;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone="MST")
 	@Column(value = "timestamp")
 	private Date timeStamp;
@@ -53,6 +55,12 @@ public class WindowTrafficData implements Serializable{
 	}
 	public void setTotalCount(long totalCount) {
 		this.totalCount = totalCount;
+	}
+	public long getTotalSum() {
+		return totalSum;
+	}
+	public void setTotalSum(long totalSum) {
+		this.totalSum = totalSum;
 	}
 	public Date getTimeStamp() {
 		return timeStamp;
