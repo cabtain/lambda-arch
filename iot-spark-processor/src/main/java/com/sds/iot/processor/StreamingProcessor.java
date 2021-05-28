@@ -91,12 +91,12 @@ public class StreamingProcessor implements Serializable {
         StreamProcessor streamProcessor = new StreamProcessor(kafkaStream);
         streamProcessor.transform()
                 .appendToHDFS(sparkSession, parqueFile)
-                .processPOIData(broadcastPOIValues)
+                //.processPOIData(broadcastPOIValues)
                 .filterVehicle()
                 .cache()
                 .processTotalTrafficData()
                 .processWindowTrafficData()
-                .processHeatMap();
+                /*.processHeatMap()*/;
 
         commitOffset(kafkaStream);
 

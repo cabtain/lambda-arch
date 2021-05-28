@@ -65,7 +65,6 @@ public class RealtimeTrafficDataProcessor {
 
         // We need to get count of vehicle group by routeId and vehicleType
         JavaDStream<TotalTrafficData> trafficDStream = filteredIotDataStream
-                //.mapToPair(iot -> new Tuple2<>(new AggregateKey(iot.getRouteId(), iot.getVehicleType()), 1L))
                 .mapToPair(iot -> new Tuple2<>(new AggregateKey(iot.getRouteId(), iot.getVehicleType()), 
                     new AggregateValue(1L, new Double(iot.getSpeed()).longValue())))
                 .reduceByKey((Function2<AggregateValue, AggregateValue, AggregateValue>) (a, b) -> 
