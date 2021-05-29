@@ -17,66 +17,66 @@ import org.apache.spark.streaming.api.java.JavaDStream;
 
 import com.sds.iot.dto.AggregateKey;
 import com.sds.iot.dto.AggregateValue;
-import com.sds.iot.entity.WindowTrafficData;
+import com.sds.iot.entity.WindowEquipmentData;
 import com.datastax.spark.connector.japi.CassandraJavaUtil;
-import com.sds.iot.entity.TotalTrafficData;
+import com.sds.iot.entity.TotalEquipmentData;
 import com.sds.iot.dto.IoTData;
 
 import scala.Tuple2;
 
 /**
- * Class to process IoT data stream and to produce traffic data details.
+ * Class to process IoT data stream and to produce equipment data details.
  *
  * @author abaghel
  */
-public class RealtimeTrafficDataProcessor {
+public class RealtimeEquipmentDataProcessor {
 
-    private static final Logger logger = Logger.getLogger(RealtimeTrafficDataProcessor.class);
+    private static final Logger logger = Logger.getLogger(RealtimeEquipmentDataProcessor.class);
 
     /**
-     * Method to get window traffic counts of different type of vehicles for each route. Window duration = 30 seconds
+     * Method to get window equipment counts of different type of vehicles for each route. Window duration = 30 seconds
      * and Slide interval = 10 seconds
      *
      * @param filteredIotDataStream IoT data stream
      */
-    public static void processWindowTrafficData(JavaDStream<IoTData> filteredIotDataStream) {
+    public static void processWindowEquipmentData(JavaDStream<IoTData> filteredIotDataStream) {
         // reduce by key and window (30 sec window and 10 sec slide).
-        JavaDStream<WindowTrafficData> trafficDStream = filteredIotDataStream
+        JavaDStream<WindowEquipmentData> equipmentDStream = filteredIotDataStream
                 .mapToPair(iot -> new Tuple2<>(new AggregateKey(iot.getRouteId(), iot.getVehicleType()), 
                     new AggregateValue(1L, new Double(iot.getSpeed()).longValue())))
                 .reduceByKeyAndWindow(((Function2<AggregateValue, AggregateValue, AggregateValue>) (a, b) -> 
                     new AggregateValue(a.getCount() + b.getCount(), a.getSum() + b.getSum())), 
                     Durations.seconds(30), Durations.seconds(10))
-                .map(RealtimeTrafficDataProcessor::mapToWindowTrafficData);
+                .map(RealtimeEquipmentDataProcessor::mapToWindowEquipmentData);
 
-        saveWindTrafficData(trafficDStream);
+        saveWindEquipmentData(equipmentDStream);
     }
 
     /**
-     * Method to get total traffic counts of different type of vehicles for each route.
+     * Method to get total equipment counts of different type of vehicles for each route.
      *
      * @param filteredIotDataStream IoT data stream
      */
-    public static void processTotalTrafficData(JavaDStream<IoTData> filteredIotDataStream) {
+    public static void processTotalEquipmentData(JavaDStream<IoTData> filteredIotDataStream) {
         // Need to keep state for total count
         StateSpec<AggregateKey, AggregateValue, AggregateValue, Tuple2<AggregateKey, AggregateValue>> stateSpec = StateSpec
-                .function(RealtimeTrafficDataProcessor::updateState)
+                .function(RealtimeEquipmentDataProcessor::updateState)
                 .timeout(Durations.seconds(3600));
 
         // We need to get count of vehicle group by routeId and vehicleType
-        JavaDStream<TotalTrafficData> trafficDStream = filteredIotDataStream
+        JavaDStream<TotalEquipmentData> equipmentDStream = filteredIotDataStream
                 .mapToPair(iot -> new Tuple2<>(new AggregateKey(iot.getRouteId(), iot.getVehicleType()), 
                     new AggregateValue(1L, new Double(iot.getSpeed()).longValue())))
                 .reduceByKey((Function2<AggregateValue, AggregateValue, AggregateValue>) (a, b) -> 
                     new AggregateValue(a.getCount() + b.getCount(), a.getSum() + b.getSum()))
                 .mapWithState(stateSpec)
                 .map(tuple2 -> tuple2)
-                .map(RealtimeTrafficDataProcessor::mapToTrafficData);
+                .map(RealtimeEquipmentDataProcessor::mapToEquipmentData);
 
-        saveTotalTrafficData(trafficDStream);
+        saveTotalEquipmentData(equipmentDStream);
     }
 
-    private static void saveTotalTrafficData(final JavaDStream<TotalTrafficData> trafficDStream) {
+    private static void saveTotalEquipmentData(final JavaDStream<TotalEquipmentData> equipmentDStream) {
         // Map Cassandra table column
         HashMap<String, String> columnNameMappings = new HashMap<>();
         columnNameMappings.put("routeId", "routeid");
@@ -87,15 +87,15 @@ public class RealtimeTrafficDataProcessor {
         columnNameMappings.put("recordDate", "recorddate");
 
         // call CassandraStreamingJavaUtil function to save in DB
-        javaFunctions(trafficDStream).writerBuilder(
-                "traffickeyspace",
-                "total_traffic",
-                CassandraJavaUtil.mapToRow(TotalTrafficData.class, columnNameMappings)
+        javaFunctions(equipmentDStream).writerBuilder(
+                "equipmentkeyspace",
+                "total_equipment",
+                CassandraJavaUtil.mapToRow(TotalEquipmentData.class, columnNameMappings)
         ).saveToCassandra();
     }
 
 
-    private static void saveWindTrafficData(final JavaDStream<WindowTrafficData> trafficDStream) {
+    private static void saveWindEquipmentData(final JavaDStream<WindowEquipmentData> equipmentDStream) {
         // Map Cassandra table column
         HashMap<String, String> columnNameMappings = new HashMap<>();
         columnNameMappings.put("routeId", "routeid");
@@ -106,46 +106,46 @@ public class RealtimeTrafficDataProcessor {
         columnNameMappings.put("recordDate", "recorddate");
 
         // call CassandraStreamingJavaUtil function to save in DB
-        javaFunctions(trafficDStream).writerBuilder(
-                "traffickeyspace",
-                "window_traffic",
-                CassandraJavaUtil.mapToRow(WindowTrafficData.class, columnNameMappings)
+        javaFunctions(equipmentDStream).writerBuilder(
+                "equipmentkeyspace",
+                "window_equipment",
+                CassandraJavaUtil.mapToRow(WindowEquipmentData.class, columnNameMappings)
         ).saveToCassandra();
     }
 
     /**
-     * Function to create WindowTrafficData object from IoT data
+     * Function to create WindowEquipmentData object from IoT data
      *
      * @param tuple
      * @return
      */
-    private static WindowTrafficData mapToWindowTrafficData(Tuple2<AggregateKey, AggregateValue> tuple) {
+    private static WindowEquipmentData mapToWindowEquipmentData(Tuple2<AggregateKey, AggregateValue> tuple) {
         logger.info("Window Count : " +
                 "key " + tuple._1().getRouteId() + "-" + tuple._1().getVehicleType() +
                 " value " + tuple._2().getCount() + "," + tuple._2().getSum());
 
-        WindowTrafficData trafficData = new WindowTrafficData();
-        trafficData.setRouteId(tuple._1().getRouteId());
-        trafficData.setVehicleType(tuple._1().getVehicleType());
-        trafficData.setTotalCount(tuple._2().getCount());
-        trafficData.setTotalSum(tuple._2().getSum());
-        trafficData.setTimeStamp(new Date());
-        trafficData.setRecordDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        return trafficData;
+        WindowEquipmentData equipmentData = new WindowEquipmentData();
+        equipmentData.setRouteId(tuple._1().getRouteId());
+        equipmentData.setVehicleType(tuple._1().getVehicleType());
+        equipmentData.setTotalCount(tuple._2().getCount());
+        equipmentData.setTotalSum(tuple._2().getSum());
+        equipmentData.setTimeStamp(new Date());
+        equipmentData.setRecordDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        return equipmentData;
     }
 
-    private static TotalTrafficData mapToTrafficData(Tuple2<AggregateKey, AggregateValue> tuple) {
+    private static TotalEquipmentData mapToEquipmentData(Tuple2<AggregateKey, AggregateValue> tuple) {
         logger.info(
                 "Total Count : " + "key " + tuple._1().getRouteId() + "-" + tuple._1().getVehicleType() + 
                 " value " + tuple._2().getCount() + "," + tuple._2().getSum());
-        TotalTrafficData trafficData = new TotalTrafficData();
-        trafficData.setRouteId(tuple._1().getRouteId());
-        trafficData.setVehicleType(tuple._1().getVehicleType());
-        trafficData.setTotalCount(tuple._2().getCount());//Count
-        trafficData.setTotalSum(tuple._2().getSum());
-        trafficData.setTimeStamp(new Date());
-        trafficData.setRecordDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        return trafficData;
+        TotalEquipmentData equipmentData = new TotalEquipmentData();
+        equipmentData.setRouteId(tuple._1().getRouteId());
+        equipmentData.setVehicleType(tuple._1().getVehicleType());
+        equipmentData.setTotalCount(tuple._2().getCount());//Count
+        equipmentData.setTotalSum(tuple._2().getSum());
+        equipmentData.setTimeStamp(new Date());
+        equipmentData.setRecordDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        return equipmentData;
     }
 
 

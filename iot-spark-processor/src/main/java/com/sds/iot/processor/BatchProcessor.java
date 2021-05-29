@@ -1,7 +1,6 @@
 package com.sds.iot.processor;
 
 import com.sds.iot.dto.IoTData;
-import com.sds.iot.dto.POIData;
 import com.sds.iot.util.PropertyFileReader;
 import com.datastax.spark.connector.util.JavaApiHelper;
 
@@ -27,32 +26,13 @@ public class BatchProcessor {
         var file = prop.getProperty("com.iot.app.hdfs") + "iot-data-parque";
         var conf = getSparkConfig(prop, jars);
         var sparkSession = SparkSession.builder().config(conf).getOrCreate();
-        //broadcast variables. We will monitor vehicles on Route 37 which are of type Truck
-        //Basically we are sending the data to each worker nodes on a Spark cluster.
-        var classTag = JavaApiHelper.getClassTag(POIData.class);
-        var broadcastPOIValues = sparkSession
-                .sparkContext()
-                .broadcast(getPointOfInterest(), classTag);
 
         var dataFrame = getDataFrame(sparkSession, file);
         var rdd = dataFrame.javaRDD().map(BatchProcessor::transformToIotData);
-        BatchHeatMapProcessor.processHeatMap(rdd);
-        BatchTrafficDataProcessor.processPOIData(rdd, broadcastPOIValues);
-        BatchTrafficDataProcessor.processTotalTrafficData(rdd);
-        BatchTrafficDataProcessor.processWindowTrafficData(rdd);
+        BatchEquipmentDataProcessor.processTotalEquipmentData(rdd);
+        BatchEquipmentDataProcessor.processWindowEquipmentData(rdd);
         sparkSession.close();
         sparkSession.stop();
-    }
-
-    private static POIData getPointOfInterest() {
-        //poi data
-        POIData poiData = new POIData();
-        poiData.setLatitude(33.877495);
-        poiData.setLongitude(-95.50238);
-        poiData.setRadius(30);//30 km
-        poiData.setRoute("Route-37");
-        poiData.setVehicle("Truck");
-        return poiData;
     }
 
     private static  IoTData transformToIotData(Row row) {

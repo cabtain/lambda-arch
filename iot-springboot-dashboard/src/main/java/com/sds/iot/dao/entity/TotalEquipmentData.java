@@ -1,6 +1,5 @@
 package com.sds.iot.dao.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
@@ -11,13 +10,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Entity class for window_traffic db table
+ * Entity class for total_equipment db table
  * 
  * @author abaghel
  *
  */
-@Table("window_traffic")
-public class WindowTrafficData implements Serializable{
+@Table("total_equipment")
+public class TotalEquipmentData implements Serializable{
 	@PrimaryKeyColumn(name = "routeid",ordinal = 0,type = PrimaryKeyType.PARTITIONED)
 	private String routeId;
 	@PrimaryKeyColumn(name = "recordDate",ordinal = 1,type = PrimaryKeyType.CLUSTERED)
@@ -70,7 +69,7 @@ public class WindowTrafficData implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "TrafficData [routeId=" + routeId + ", vehicleType=" + vehicleType + ", totalCount=" + totalCount
+		return "EquipmentData [routeId=" + routeId + ", vehicleType=" + vehicleType + ", totalCount=" + totalCount
 				+ ", timeStamp=" + timeStamp + "]";
 	}
 	

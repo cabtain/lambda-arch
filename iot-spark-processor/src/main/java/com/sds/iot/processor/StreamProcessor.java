@@ -1,7 +1,6 @@
 package com.sds.iot.processor;
 
 import com.sds.iot.dto.IoTData;
-import com.sds.iot.dto.POIData;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.log4j.Logger;
@@ -104,29 +103,18 @@ public class StreamProcessor implements Serializable {
         return this;
     }
 
-    public StreamProcessor processPOIData(final Broadcast<POIData> broadcastPOIValues) {
-        PointOfInterestProcessor.processPOIData(transformedStream, broadcastPOIValues);
+    public StreamProcessor processTotalEquipmentData() {
+        RealtimeEquipmentDataProcessor.processTotalEquipmentData(filteredStream);
         return this;
     }
 
-    public StreamProcessor processTotalTrafficData() {
-        RealtimeTrafficDataProcessor.processTotalTrafficData(filteredStream);
+    public StreamProcessor processWindowEquipmentData() {
+        RealtimeEquipmentDataProcessor.processWindowEquipmentData(filteredStream);
         return this;
     }
-
-    public StreamProcessor processWindowTrafficData() {
-        RealtimeTrafficDataProcessor.processWindowTrafficData(filteredStream);
-        return this;
-    }
-
-    public StreamProcessor processHeatMap() throws IOException {
-        RealTimeHeatMapProcessor.processHeatMap(filteredStream);
-        return this;
-    }
-
 
     public StreamProcessor filterVehicle() {
-        //We need filtered stream for total and traffic data calculation
+        //We need filtered stream for total and Equipment data calculation
         var map = mapToPair(transformedStream);
         var key = reduceByKey(map);
         var state = mapWithState(key);

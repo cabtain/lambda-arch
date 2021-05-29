@@ -1,7 +1,6 @@
 package com.sds.iot.processor;
 
 import com.sds.iot.dto.IoTData;
-import com.sds.iot.dto.POIData;
 import com.sds.iot.util.IoTDataDeserializer;
 import com.sds.iot.util.PropertyFileReader;
 import com.datastax.spark.connector.util.JavaApiHelper;
@@ -83,20 +82,13 @@ public class StreamingProcessor implements Serializable {
 
         //broadcast variables. We will monitor vehicles on Route 37 which are of type Truck
         //Basically we are sending the data to each worker nodes on a Spark cluster.
-        ClassTag<POIData> classTag = JavaApiHelper.getClassTag(POIData.class);
-        Broadcast<POIData> broadcastPOIValues = sparkSession
-                .sparkContext()
-                .broadcast(getPointOfInterest(), classTag);
-
         StreamProcessor streamProcessor = new StreamProcessor(kafkaStream);
         streamProcessor.transform()
                 .appendToHDFS(sparkSession, parqueFile)
-                //.processPOIData(broadcastPOIValues)
                 .filterVehicle()
                 .cache()
-                .processTotalTrafficData()
-                .processWindowTrafficData()
-                /*.processHeatMap()*/;
+                .processTotalEquipmentData()
+                .processWindowEquipmentData();
 
         commitOffset(kafkaStream);
 
@@ -113,26 +105,18 @@ public class StreamingProcessor implements Serializable {
         }
     }
 
-    private POIData getPointOfInterest() {
-        POIData poiData = new POIData();
-        poiData.setLatitude(53.877495);
-        poiData.setLongitude(-6.50238);
-        poiData.setRadius(100);//100 km
-        return poiData;
-    }
-
     /**
      * Commit the ack to kafka after process have completed
      *
      * @param directKafkaStream
      */
     private void commitOffset(JavaInputDStream<ConsumerRecord<String, IoTData>> directKafkaStream) {
-        directKafkaStream.foreachRDD((JavaRDD<ConsumerRecord<String, IoTData>> trafficRdd) -> {
-            if (!trafficRdd.isEmpty()) {
-                OffsetRange[] offsetRanges = ((HasOffsetRanges) trafficRdd.rdd()).offsetRanges();
+        directKafkaStream.foreachRDD((JavaRDD<ConsumerRecord<String, IoTData>> equipmentRdd) -> {
+            if (!equipmentRdd.isEmpty()) {
+                OffsetRange[] offsetRanges = ((HasOffsetRanges) equipmentRdd.rdd()).offsetRanges();
 
                 CanCommitOffsets canCommitOffsets = (CanCommitOffsets) directKafkaStream.inputDStream();
-                canCommitOffsets.commitAsync(offsetRanges, new TrafficOffsetCommitCallback());
+                canCommitOffsets.commitAsync(offsetRanges, new EquipmentOffsetCommitCallback());
             }
         });
     }
@@ -185,9 +169,9 @@ public class StreamingProcessor implements Serializable {
 
 }
 
-final class TrafficOffsetCommitCallback implements OffsetCommitCallback, Serializable {
+final class EquipmentOffsetCommitCallback implements OffsetCommitCallback, Serializable {
 
-    private static final Logger log = Logger.getLogger(TrafficOffsetCommitCallback.class);
+    private static final Logger log = Logger.getLogger(EquipmentOffsetCommitCallback.class);
 
     @Override
     public void onComplete(Map<TopicPartition, OffsetAndMetadata> offsets, Exception exception) {

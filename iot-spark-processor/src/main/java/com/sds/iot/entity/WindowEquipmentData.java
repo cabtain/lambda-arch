@@ -6,11 +6,9 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
- * Class to represent window_tarffic db table
- *
- * @author abaghel
+ * Class to represent window_equipment db table
  */
-public class WindowTrafficData implements Serializable {
+public class WindowEquipmentData implements Serializable {
 
     private String routeId;
     private String vehicleType;

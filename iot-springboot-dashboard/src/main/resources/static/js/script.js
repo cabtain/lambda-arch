@@ -1,8 +1,4 @@
-/**
-* 
-**/
-
- var totalTrafficChartData={
+var totalEquipmentChartData={
             labels : ["Type"],
             datasets : [{
                 label : "Equipment",
@@ -11,7 +7,7 @@
            ]
         };
 
-var route37TrafficChartData={
+var route37EquipmentChartData={
             labels : ["Type"],
             datasets : [{
                 data : [1]
@@ -22,69 +18,69 @@ var route37TrafficChartData={
 
 jQuery(document).ready(function() {
     //Charts
-    var ctx1 = document.getElementById("totalTrafficChart").getContext("2d");
+    var ctx1 = document.getElementById("totalEquipmentChart").getContext("2d");
     window.tChart = new Chart(ctx1, {
                 type: 'bar',
-                data: totalTrafficChartData
+                data: totalEquipmentChartData
             });
 
-    var ctx2 = document.getElementById("route37TrafficChart").getContext("2d");
+    var ctx2 = document.getElementById("route37EquipmentChart").getContext("2d");
     window.wChart = new Chart(ctx2, {
                 type: 'doughnut',
-                data: route37TrafficChartData
+                data: route37EquipmentChartData
             });
 
     //tables
-    var totalTrafficList = jQuery("#total_traffic");
-    var windowTrafficList = jQuery("#window_traffic");
+    var totalEquipmentList = jQuery("#total_equipment");
+    var windowEquipmentList = jQuery("#window_equipment");
 
     //use sockjs
     var socket = new SockJS('/stomp');
     var stompClient = Stomp.over(socket);
 
     stompClient.connect({ }, function(frame) {
-        //subscribe "/topic/trafficData" message
-        stompClient.subscribe("/topic/trafficData", function(data) {
+        //subscribe "/topic/equipmentData" message
+        stompClient.subscribe("/topic/equipmentData", function(data) {
             var dataList = data.body;
             var resp=jQuery.parseJSON(dataList);
 
-            //Total traffic
+            //Total equipment
             var totalOutput='';
-            jQuery.each(resp.totalTraffic, function(i,vh) {
+            jQuery.each(resp.totalEquipment, function(i,vh) {
                  totalOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+(vh.totalSum/vh.totalCount).toFixed(2)+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
             });
             var t_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Average</th><th>Time</th></tr></thead>";
             var t_tabl_end = "</table>";
-            totalTrafficList.html(t_tabl_start+totalOutput+t_tabl_end);
+            totalEquipmentList.html(t_tabl_start+totalOutput+t_tabl_end);
 
-            //Window traffic
+            //Window equipment
             var windowOutput='';
-            jQuery.each(resp.windowTraffic, function(i,vh) {
+            jQuery.each(resp.windowEquipment, function(i,vh) {
                  windowOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+(vh.totalSum/vh.totalCount).toFixed(2)+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
             });
             var w_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Average</th><th>Time</th></tr></thead>";
             var w_tabl_end = "</table>";
-            windowTrafficList.html(w_tabl_start+windowOutput+w_tabl_end);
+            windowEquipmentList.html(w_tabl_start+windowOutput+w_tabl_end);
 
-            //draw total traffic chart
-            drawBarChart(resp.totalTraffic,totalTrafficChartData);
+            //draw total equipment chart
+            drawBarChart(resp.totalEquipment,totalEquipmentChartData);
             window.tChart.update();
 
-            //draw route-37 traffic chart
-            drawDoughnutChart(resp.totalTraffic,route37TrafficChartData);
+            //draw route-37 equipment chart
+            drawDoughnutChart(resp.totalEquipment,route37EquipmentChartData);
             window.wChart.update();
 
         });
     });
 });
 
-function drawBarChart(trafficDetail,trafficChartData){
-    //Prepare data for total traffic chart
+function drawBarChart(equipmentDetail,equipmentChartData){
+    //Prepare data for total equipment chart
     var chartLabel = ["Temperature", "Current", "Voltage", "Vibration", "Level"];
     var routeName = ["Equipment_A", "Equipment_B", "Equipment_C"];
     var chartData0 =[0,0,0,0,0], chartData1 =[0,0,0,0,0], chartData2 =[0,0,0,0,0];
 
-    jQuery.each(trafficDetail, function(i,vh) {
+    jQuery.each(equipmentDetail, function(i,vh) {
 
         if(vh.routeId == routeName[0]){
             chartData0.splice(chartLabel.indexOf(vh.vehicleType),1,(vh.totalSum/vh.totalCount).toFixed(2));
@@ -97,7 +93,7 @@ function drawBarChart(trafficDetail,trafficChartData){
         }
     });
 
-    var trafficData = {
+    var equipmentData = {
         labels : chartLabel,
         datasets : [{
             label				  : routeName[0],
@@ -121,15 +117,15 @@ function drawBarChart(trafficDetail,trafficChartData){
         ]
     };
       //update chart
-      trafficChartData.datasets=trafficData.datasets;
-      trafficChartData.labels=trafficData.labels;
+      equipmentChartData.datasets=equipmentData.datasets;
+      equipmentChartData.labels=equipmentData.labels;
  }
 
-function drawDoughnutChart(trafficDetail,trafficChartData){
+function drawDoughnutChart(equipmentDetail,equipmentChartData){
     //Prepare data for Doughnut chart
     var chartData =[];
     var chartLabel = [];
-    jQuery.each(trafficDetail, function(i,vh) {
+    jQuery.each(equipmentDetail, function(i,vh) {
         if(vh.routeId == "Equipment_A"){
             chartLabel.push(vh.vehicleType);
             chartData.push(vh.totalCount);
@@ -144,8 +140,8 @@ function drawDoughnutChart(trafficDetail,trafficChartData){
     };
 
       //update chart
-      trafficChartData.datasets=pieChartData.datasets;
-      trafficChartData.labels=pieChartData.labels;
+      equipmentChartData.datasets=pieChartData.datasets;
+      equipmentChartData.labels=pieChartData.labels;
 }
 
  function getRandomColor() {
