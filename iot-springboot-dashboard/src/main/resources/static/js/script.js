@@ -1,19 +1,20 @@
 var totalEquipmentChartData={
-            labels : ["Type"],
-            datasets : [{
-                label : "Equipment",
-                data : [1]
-            }
-           ]
-        };
+    labels : ["Type"],
+    datasets : [{
+        label : "Equipment",
+        data : [1]
+    }
+   ]
+};
 
-var route37EquipmentChartData={
-            labels : ["Type"],
-            datasets : [{
-                data : [1]
-            }
-           ]
-        };
+var windowEquipmentChartData={
+    labels : ["Type"],
+    datasets : [{
+        label : "Equipment",
+        data : [1]
+    }
+   ]
+};
 
 
 jQuery(document).ready(function() {
@@ -24,10 +25,10 @@ jQuery(document).ready(function() {
                 data: totalEquipmentChartData
             });
 
-    var ctx2 = document.getElementById("route37EquipmentChart").getContext("2d");
+    var ctx2 = document.getElementById("windowEquipmentChart").getContext("2d");
     window.wChart = new Chart(ctx2, {
-                type: 'doughnut',
-                data: route37EquipmentChartData
+                type: 'bar',
+                data: windowEquipmentChartData
             });
 
     //tables
@@ -66,8 +67,8 @@ jQuery(document).ready(function() {
             drawBarChart(resp.totalEquipment,totalEquipmentChartData);
             window.tChart.update();
 
-            //draw route-37 equipment chart
-            drawDoughnutChart(resp.totalEquipment,route37EquipmentChartData);
+            //draw window equipment chart
+            drawBarChart(resp.windowEquipment,windowEquipmentChartData);
             window.wChart.update();
 
         });
@@ -75,7 +76,7 @@ jQuery(document).ready(function() {
 });
 
 function drawBarChart(equipmentDetail,equipmentChartData){
-    //Prepare data for total equipment chart
+    //Prepare data for equipment chart
     var chartLabel = ["Temperature", "Current", "Voltage", "Vibration", "Level"];
     var routeName = ["Equipment_A", "Equipment_B", "Equipment_C"];
     var chartData0 =[0,0,0,0,0], chartData1 =[0,0,0,0,0], chartData2 =[0,0,0,0,0];
@@ -116,33 +117,10 @@ function drawBarChart(equipmentDetail,equipmentChartData){
 
         ]
     };
-      //update chart
-      equipmentChartData.datasets=equipmentData.datasets;
-      equipmentChartData.labels=equipmentData.labels;
+    //update chart
+    equipmentChartData.datasets=equipmentData.datasets;
+    equipmentChartData.labels=equipmentData.labels;
  }
-
-function drawDoughnutChart(equipmentDetail,equipmentChartData){
-    //Prepare data for Doughnut chart
-    var chartData =[];
-    var chartLabel = [];
-    jQuery.each(equipmentDetail, function(i,vh) {
-        if(vh.routeId == "Equipment_A"){
-            chartLabel.push(vh.vehicleType);
-            chartData.push(vh.totalCount);
-        }
-      });
-        var pieChartData = {
-        labels : chartLabel,
-        datasets : [{
-            backgroundColor  : ["#E81574","#DDE815","#B315E8","#e9967a","#90ee90"],
-            data             : chartData
-        }]
-    };
-
-      //update chart
-      equipmentChartData.datasets=pieChartData.datasets;
-      equipmentChartData.labels=pieChartData.labels;
-}
 
  function getRandomColor() {
     return  'rgba(' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + ('1') + ')';
