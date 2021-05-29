@@ -9,7 +9,7 @@ While simultaneously the data is also stored into HDFS for Batch processing.
 We performed a series of stateless and stateful transformation using Spark streaming API on 
 streams and persisted them to Cassandra database tables. In order to get accurate views, 
 we also perform a batch processing and generating a batch view into Cassandra.
-We developed responsive web traffic monitoring dashboard using Spring Boot, 
+We developed responsive web equipments monitoring dashboard using Spring Boot, 
 SockJs and Bootstrap which get the views from the Cassandra database and push to the UI using web socket.
 
 
@@ -61,7 +61,7 @@ Wait all services be up and running, then launch another terminal and run below
 
 `$ docker exec spark-master /spark/bin/spark-submit --class com.sds.iot.processor.StreamingProcessor --master spark://spark-master:7077 /opt/spark-data/iot-spark-processor-1.0.0.jar`
 
-### Run the traffic producer
+### Run the data producer
 
 `$ java -jar iot-kafka-producer/target/iot-kafka-producer-1.0.0.jar`
 
@@ -77,8 +77,7 @@ Access the dashboard with the data http://34.145.64.35:3000/
 
 http://34.145.64.35:3000/
 
-![image](https://user-images.githubusercontent.com/1121859/119249928-9bbab780-bbd7-11eb-8680-98a1fae08cee.png)
-
+![image](https://user-images.githubusercontent.com/1121859/120071698-6debdc00-c0cb-11eb-8715-68816177010a.png)
 
 
 http://34.145.64.35:8080/
