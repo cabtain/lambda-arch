@@ -14,7 +14,6 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaInputDStream;
@@ -80,12 +79,11 @@ public class StreamingProcessor implements Serializable {
 
         logger.info("Starting Stream Processing");
 
-        //broadcast variables. We will monitor vehicles on Route 37 which are of type Truck
         //Basically we are sending the data to each worker nodes on a Spark cluster.
         StreamProcessor streamProcessor = new StreamProcessor(kafkaStream);
         streamProcessor.transform()
                 .appendToHDFS(sparkSession, parqueFile)
-                .filterVehicle()
+                .filterEquipment()
                 .cache()
                 .processTotalEquipmentData()
                 .processWindowEquipmentData();

@@ -9,25 +9,25 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 public class TotalEquipmentData implements Serializable{
 
-	private String routeId;
-	private String vehicleType;
+	private String equipmentId;
+	private String sensorType;
 	private long totalCount;
 	private long totalSum;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone="MST")
 	private Date timeStamp;
 	private String recordDate;
 	
-	public String getRouteId() {
-		return routeId;
+	public String getEquipmentId() {
+		return equipmentId;
 	}
-	public void setRouteId(String routeId) {
-		this.routeId = routeId;
+	public void setEquipmentId(String equipmentId) {
+		this.equipmentId = equipmentId;
 	}
-	public String getVehicleType() {
-		return vehicleType;
+	public String getSensorType() {
+		return sensorType;
 	}
-	public void setVehicleType(String vehicleType) {
-		this.vehicleType = vehicleType;
+	public void setSensorType(String sensorType) {
+		this.sensorType = sensorType;
 	}
 	public long getTotalCount() {
 		return totalCount;
@@ -55,6 +55,4 @@ public class TotalEquipmentData implements Serializable{
 	public void setRecordDate(String recordDate) {
 		this.recordDate = recordDate;
 	}
-	
-	
 }

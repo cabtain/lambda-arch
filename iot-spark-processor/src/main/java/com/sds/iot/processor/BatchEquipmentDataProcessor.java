@@ -29,15 +29,15 @@ public class BatchEquipmentDataProcessor {
     private static final Logger logger = Logger.getLogger(BatchEquipmentDataProcessor.class);
 
     /**
-     * Method to get total equipment counts of different type of vehicles for each route.
+     * Method to get total equipment counts of different type of sensor for each equipment.
      *
      * @param filteredIotDataStream IoT data stream
      */
     public static void processTotalEquipmentData(JavaRDD<IoTData> filteredIotDataStream) {
-        // We need to get count of vehicle group by routeId and vehicleType
+        // We need to get count of sensor group by equipmentId and sensorType
         JavaPairRDD<AggregateKey, Long> countDStreamPair = filteredIotDataStream
                 .mapToPair(iot -> new Tuple2<>(
-                        new AggregateKey(iot.getRouteId(), iot.getVehicleType()),
+                        new AggregateKey(iot.getEquipmentId(), iot.getSensorType()),
                         1L
                 ))
                 .reduceByKey((a, b) -> a + b);
@@ -51,8 +51,8 @@ public class BatchEquipmentDataProcessor {
     private static void persistTotalEquipment(JavaRDD<TotalEquipmentData> equipmentDStream) {
         // Map Cassandra table column
         Map<String, String> columnNameMappings = new HashMap<String, String>();
-        columnNameMappings.put("routeId", "routeid");
-        columnNameMappings.put("vehicleType", "vehicletype");
+        columnNameMappings.put("equipmentId", "equipmentid");
+        columnNameMappings.put("sensorType", "sensortype");
         columnNameMappings.put("totalCount", "totalcount");
         columnNameMappings.put("timeStamp", "timestamp");
         columnNameMappings.put("recordDate", "recorddate");
@@ -66,7 +66,7 @@ public class BatchEquipmentDataProcessor {
 
 
     /**
-     * Method to get window equipment counts of different type of vehicles for each route. Window duration = 30 seconds and Slide interval = 10 seconds
+     * Method to get window equipment counts of different type of sensors for each equipment. Window duration = 30 seconds and Slide interval = 10 seconds
      *
      * @param filteredIotDataStream IoT data stream
      */
@@ -98,8 +98,8 @@ public class BatchEquipmentDataProcessor {
     private static void persistWindowEquipment(JavaRDD<WindowEquipmentData> equipmentDStream) {
         // Map Cassandra table column
         Map<String, String> columnNameMappings = new HashMap<>();
-        columnNameMappings.put("routeId", "routeid");
-        columnNameMappings.put("vehicleType", "vehicletype");
+        columnNameMappings.put("equipmentId", "equipmentid");
+        columnNameMappings.put("sensorType", "sensortype");
         columnNameMappings.put("totalCount", "totalcount");
         columnNameMappings.put("timeStamp", "timestamp");
         columnNameMappings.put("recordDate", "recorddate");
@@ -114,7 +114,7 @@ public class BatchEquipmentDataProcessor {
 
     private static JavaRDD<WindowEquipmentData> getWindowEquipmentData(JavaRDD<IoTData> filteredData) {
         JavaPairRDD<AggregateKey, Long> javaPairRDD = filteredData.mapToPair(iot -> new Tuple2<>(
-                new AggregateKey(iot.getRouteId(), iot.getVehicleType()),
+                new AggregateKey(iot.getEquipmentId(), iot.getSensorType()),
                 1L
         ));
 
@@ -139,10 +139,10 @@ public class BatchEquipmentDataProcessor {
 
     //Function to create TotalEquipmentData object from IoT data
     private static final TotalEquipmentData transformToTotalEquipmentData(Tuple2<AggregateKey, Long> tuple) {
-        logger.debug("Total Count : " + "key " + tuple._1().getRouteId() + "-" + tuple._1().getVehicleType() + " value " + tuple._2());
+        logger.debug("Total Count : " + "key " + tuple._1().getEquipmentId() + "-" + tuple._1().getSensorType() + " value " + tuple._2());
         TotalEquipmentData equipmentData = new TotalEquipmentData();
-        equipmentData.setRouteId(tuple._1().getRouteId());
-        equipmentData.setVehicleType(tuple._1().getVehicleType());
+        equipmentData.setEquipmentId(tuple._1().getEquipmentId());
+        equipmentData.setSensorType(tuple._1().getSensorType());
         equipmentData.setTotalCount(tuple._2());
         equipmentData.setTimeStamp(new Date());
         equipmentData.setRecordDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -151,10 +151,10 @@ public class BatchEquipmentDataProcessor {
 
     //Function to create WindowEquipmentData object from IoT data
     private static final Function<Tuple2<AggregateKey, Long>, WindowEquipmentData> windowEquipmentDataFunc = (tuple -> {
-        logger.debug("Window Count : " + "key " + tuple._1().getRouteId() + "-" + tuple._1().getVehicleType() + " value " + tuple._2());
+        logger.debug("Window Count : " + "key " + tuple._1().getEquipmentId() + "-" + tuple._1().getSensorType() + " value " + tuple._2());
         WindowEquipmentData equipmentData = new WindowEquipmentData();
-        equipmentData.setRouteId(tuple._1().getRouteId());
-        equipmentData.setVehicleType(tuple._1().getVehicleType());
+        equipmentData.setEquipmentId(tuple._1().getEquipmentId());
+        equipmentData.setSensorType(tuple._1().getSensorType());
         equipmentData.setTotalCount(tuple._2());
         equipmentData.setTimeStamp(new Date());
         equipmentData.setRecordDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

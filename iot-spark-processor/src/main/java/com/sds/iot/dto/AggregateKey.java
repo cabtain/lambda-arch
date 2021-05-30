@@ -4,34 +4,32 @@ import java.io.Serializable;
 
 /**
  * Key class for calculation
- *
- * @author abaghel
  */
 public class AggregateKey implements Serializable {
 
-    private String routeId;
-    private String vehicleType;
+    private String equipmentId;
+    private String sensorType;
 
-    public AggregateKey(String routeId, String vehicleType) {
+    public AggregateKey(String equipmentId, String sensorType) {
         super();
-        this.routeId = routeId;
-        this.vehicleType = vehicleType;
+        this.equipmentId = equipmentId;
+        this.sensorType = sensorType;
     }
 
-    public String getRouteId() {
-        return routeId;
+    public String getEquipmentId() {
+        return equipmentId;
     }
 
-    public String getVehicleType() {
-        return vehicleType;
+    public String getSensorType() {
+        return sensorType;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((routeId == null) ? 0 : routeId.hashCode());
-        result = prime * result + ((vehicleType == null) ? 0 : vehicleType.hashCode());
+        result = prime * result + ((equipmentId == null) ? 0 : equipmentId.hashCode());
+        result = prime * result + ((sensorType == null) ? 0 : sensorType.hashCode());
         return result;
     }
 
@@ -39,8 +37,8 @@ public class AggregateKey implements Serializable {
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof AggregateKey) {
             AggregateKey other = (AggregateKey) obj;
-            if (other.getRouteId() != null && other.getVehicleType() != null) {
-                if ((other.getRouteId().equals(this.routeId)) && (other.getVehicleType().equals(this.vehicleType))) {
+            if (other.getEquipmentId() != null && other.getSensorType() != null) {
+                if ((other.getEquipmentId().equals(this.equipmentId)) && (other.getSensorType().equals(this.sensorType))) {
                     return true;
                 }
             }

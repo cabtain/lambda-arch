@@ -6,70 +6,47 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
- * Class to represent the IoT vehicle data.
- * 
- * @author abaghel
- *
+ * Class to represent the IoT equipment data.
  */
 public class IoTData implements Serializable{
 	
-	private String vehicleId;
-	private String vehicleType;
-	private String routeId;
-	private String longitude;
-	private String latitude;
+	private String eventId;
+	private String equipmentId;
+	private String sensorType;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone="MST")
 	private Date timestamp;
-	private double speed;
-	private double fuelLevel;
+	private double value;
 	
 	public IoTData(){
 		
 	}
 	
-	public IoTData(String vehicleId, String vehicleType, String routeId, String latitude, String longitude,
-			Date timestamp, double speed, double fuelLevel) {
+	public IoTData(String eventId, String equipmentId, String sensorType, Date timestamp, double value) {
 		super();
-		this.vehicleId = vehicleId;
-		this.vehicleType = vehicleType;
-		this.routeId = routeId;
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.eventId = eventId;
+		this.equipmentId = equipmentId;
+		this.sensorType = sensorType;
 		this.timestamp = timestamp;
-		this.speed = speed;
-		this.fuelLevel = fuelLevel;
+		this.value = value;
 	}
 
-	public String getVehicleId() {
-		return vehicleId;
+	public String getEventId() {
+		return eventId;
 	}
 
-	public String getVehicleType() {
-		return vehicleType;
+	public String getEquipmentId() {
+		return equipmentId;
 	}
 
-	public String getRouteId() {
-		return routeId;
-	}
-
-	public String getLongitude() {
-		return longitude;
-	}
-
-	public String getLatitude() {
-		return latitude;
+	public String getSensorType() {
+		return sensorType;
 	}
 
 	public Date getTimestamp() {
 		return timestamp;
 	}
 
-	public double getSpeed() {
-		return speed;
+	public double getValue() {
+		return value;
 	}
-
-	public double getFuelLevel() {
-		return fuelLevel;
-	}
-
 }

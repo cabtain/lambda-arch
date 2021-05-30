@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS EquipmentKeySpace.Total_Equipment_batch;
 DROP TABLE IF EXISTS EquipmentKeySpace.Window_Equipment_batch;
 
 //Create table
-CREATE TABLE EquipmentKeySpace.Total_Equipment (routeId text ,  vehicleType text,  totalCount bigint,  totalSum bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
-CREATE TABLE EquipmentKeySpace.Window_Equipment (routeId text , vehicleType text,  totalCount bigint,  totalSum bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
-CREATE TABLE EquipmentKeySpace.Total_Equipment_batch (routeId text ,  vehicleType text,  totalCount bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
-CREATE TABLE EquipmentKeySpace.Window_Equipment_batch (routeId text , vehicleType text,  totalCount bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (routeId,recordDate,vehicleType));
+CREATE TABLE EquipmentKeySpace.Total_Equipment (equipmentId text ,  sensorType text,  totalCount bigint,  totalSum bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (equipmentId,recordDate,sensorType));
+CREATE TABLE EquipmentKeySpace.Window_Equipment (equipmentId text , sensorType text,  totalCount bigint,  totalSum bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (equipmentId,recordDate,sensorType));
+CREATE TABLE EquipmentKeySpace.Total_Equipment_batch (equipmentId text ,  sensorType text,  totalCount bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (equipmentId,recordDate,sensorType));
+CREATE TABLE EquipmentKeySpace.Window_Equipment_batch (equipmentId text , sensorType text,  totalCount bigint, timeStamp timestamp,recordDate text,PRIMARY KEY (equipmentId,recordDate,sensorType));

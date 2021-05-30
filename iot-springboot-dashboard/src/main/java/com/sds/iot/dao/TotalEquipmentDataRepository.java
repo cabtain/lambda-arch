@@ -14,6 +14,6 @@ import java.util.UUID;
 @Repository
 public interface TotalEquipmentDataRepository extends CassandraRepository<TotalEquipmentData, UUID>{
 
-	 @Query("SELECT * FROM equipmentkeyspace.total_equipment WHERE recorddate = ?0 ALLOW FILTERING")
-	 Iterable<TotalEquipmentData> findEquipmentDataByDate(String date);
+	@Query("SELECT * FROM equipmentkeyspace.total_equipment WHERE recorddate = ?0 ALLOW FILTERING")
+	Iterable<TotalEquipmentData> findEquipmentDataByDate(String date);
 }

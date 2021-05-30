@@ -26,34 +26,32 @@ import scala.Tuple2;
 
 /**
  * Class to process IoT data stream and to produce equipment data details.
- *
- * @author abaghel
  */
 public class RealtimeEquipmentDataProcessor {
 
     private static final Logger logger = Logger.getLogger(RealtimeEquipmentDataProcessor.class);
 
     /**
-     * Method to get window equipment counts of different type of vehicles for each route. Window duration = 30 seconds
-     * and Slide interval = 10 seconds
+     * Method to get window equipment counts of different type of sensors for each equipment. Window duration = 30 seconds
+     * and Slide interval = 5 seconds
      *
      * @param filteredIotDataStream IoT data stream
      */
     public static void processWindowEquipmentData(JavaDStream<IoTData> filteredIotDataStream) {
-        // reduce by key and window (30 sec window and 10 sec slide).
+        // reduce by key and window (30 sec window and 5 sec slide).
         JavaDStream<WindowEquipmentData> equipmentDStream = filteredIotDataStream
-                .mapToPair(iot -> new Tuple2<>(new AggregateKey(iot.getRouteId(), iot.getVehicleType()), 
-                    new AggregateValue(1L, new Double(iot.getSpeed()).longValue())))
+                .mapToPair(iot -> new Tuple2<>(new AggregateKey(iot.getEquipmentId(), iot.getSensorType()), 
+                    new AggregateValue(1L, new Double(iot.getValue()).longValue())))
                 .reduceByKeyAndWindow(((Function2<AggregateValue, AggregateValue, AggregateValue>) (a, b) -> 
                     new AggregateValue(a.getCount() + b.getCount(), a.getSum() + b.getSum())), 
-                    Durations.seconds(30), Durations.seconds(10))
+                    Durations.seconds(30), Durations.seconds(5))
                 .map(RealtimeEquipmentDataProcessor::mapToWindowEquipmentData);
 
         saveWindEquipmentData(equipmentDStream);
     }
 
     /**
-     * Method to get total equipment counts of different type of vehicles for each route.
+     * Method to get total equipment counts of different type of sensors for each equipment.
      *
      * @param filteredIotDataStream IoT data stream
      */
@@ -63,10 +61,10 @@ public class RealtimeEquipmentDataProcessor {
                 .function(RealtimeEquipmentDataProcessor::updateState)
                 .timeout(Durations.seconds(3600));
 
-        // We need to get count of vehicle group by routeId and vehicleType
+        // We need to get count of sensor group by equipmentId and sensorType
         JavaDStream<TotalEquipmentData> equipmentDStream = filteredIotDataStream
-                .mapToPair(iot -> new Tuple2<>(new AggregateKey(iot.getRouteId(), iot.getVehicleType()), 
-                    new AggregateValue(1L, new Double(iot.getSpeed()).longValue())))
+                .mapToPair(iot -> new Tuple2<>(new AggregateKey(iot.getEquipmentId(), iot.getSensorType()), 
+                    new AggregateValue(1L, new Double(iot.getValue()).longValue())))
                 .reduceByKey((Function2<AggregateValue, AggregateValue, AggregateValue>) (a, b) -> 
                     new AggregateValue(a.getCount() + b.getCount(), a.getSum() + b.getSum()))
                 .mapWithState(stateSpec)
@@ -79,8 +77,8 @@ public class RealtimeEquipmentDataProcessor {
     private static void saveTotalEquipmentData(final JavaDStream<TotalEquipmentData> equipmentDStream) {
         // Map Cassandra table column
         HashMap<String, String> columnNameMappings = new HashMap<>();
-        columnNameMappings.put("routeId", "routeid");
-        columnNameMappings.put("vehicleType", "vehicletype");
+        columnNameMappings.put("equipmentId", "equipmentid");
+        columnNameMappings.put("sensorType", "sensortype");
         columnNameMappings.put("totalCount", "totalcount");
         columnNameMappings.put("totalSum", "totalsum");
         columnNameMappings.put("timeStamp", "timestamp");
@@ -98,8 +96,8 @@ public class RealtimeEquipmentDataProcessor {
     private static void saveWindEquipmentData(final JavaDStream<WindowEquipmentData> equipmentDStream) {
         // Map Cassandra table column
         HashMap<String, String> columnNameMappings = new HashMap<>();
-        columnNameMappings.put("routeId", "routeid");
-        columnNameMappings.put("vehicleType", "vehicletype");
+        columnNameMappings.put("equipmentId", "equipmentid");
+        columnNameMappings.put("sensorType", "sensortype");
         columnNameMappings.put("totalCount", "totalcount");
         columnNameMappings.put("totalSum", "totalsum");
         columnNameMappings.put("timeStamp", "timestamp");
@@ -121,12 +119,12 @@ public class RealtimeEquipmentDataProcessor {
      */
     private static WindowEquipmentData mapToWindowEquipmentData(Tuple2<AggregateKey, AggregateValue> tuple) {
         logger.info("Window Count : " +
-                "key " + tuple._1().getRouteId() + "-" + tuple._1().getVehicleType() +
+                "key " + tuple._1().getEquipmentId() + "-" + tuple._1().getSensorType() +
                 " value " + tuple._2().getCount() + "," + tuple._2().getSum());
 
         WindowEquipmentData equipmentData = new WindowEquipmentData();
-        equipmentData.setRouteId(tuple._1().getRouteId());
-        equipmentData.setVehicleType(tuple._1().getVehicleType());
+        equipmentData.setEquipmentId(tuple._1().getEquipmentId());
+        equipmentData.setSensorType(tuple._1().getSensorType());
         equipmentData.setTotalCount(tuple._2().getCount());
         equipmentData.setTotalSum(tuple._2().getSum());
         equipmentData.setTimeStamp(new Date());
@@ -136,12 +134,12 @@ public class RealtimeEquipmentDataProcessor {
 
     private static TotalEquipmentData mapToEquipmentData(Tuple2<AggregateKey, AggregateValue> tuple) {
         logger.info(
-                "Total Count : " + "key " + tuple._1().getRouteId() + "-" + tuple._1().getVehicleType() + 
+                "Total Count : " + "key " + tuple._1().getEquipmentId() + "-" + tuple._1().getSensorType() + 
                 " value " + tuple._2().getCount() + "," + tuple._2().getSum());
         TotalEquipmentData equipmentData = new TotalEquipmentData();
-        equipmentData.setRouteId(tuple._1().getRouteId());
-        equipmentData.setVehicleType(tuple._1().getVehicleType());
-        equipmentData.setTotalCount(tuple._2().getCount());//Count
+        equipmentData.setEquipmentId(tuple._1().getEquipmentId());
+        equipmentData.setSensorType(tuple._1().getSensorType());
+        equipmentData.setTotalCount(tuple._2().getCount());
         equipmentData.setTotalSum(tuple._2().getSum());
         equipmentData.setTimeStamp(new Date());
         equipmentData.setRecordDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

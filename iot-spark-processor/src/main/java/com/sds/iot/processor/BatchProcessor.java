@@ -37,23 +37,18 @@ public class BatchProcessor {
 
     private static  IoTData transformToIotData(Row row) {
         return new IoTData(
-                    row.getString(6),
-                    row.getString(7),
                     row.getString(3),
-                    row.getString(1),
-                    row.getString(2),
-                    row.getDate(5),
-                    row.getDouble(4),
-                    row.getDouble(0)
+                    row.getString(0),
+                    row.getString(4),
+                    row.getDate(2),
+                    row.getDouble(1)
             );
     }
-
 
     public static Dataset<Row> getDataFrame(SparkSession sqlContext, String file) {
         return sqlContext.read()
                 .parquet(file);
     }
-
 
     private static SparkConf getSparkConfig(Properties prop, String[] jars) {
         return new SparkConf()

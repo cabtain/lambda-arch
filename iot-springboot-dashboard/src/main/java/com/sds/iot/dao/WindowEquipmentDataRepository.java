@@ -10,14 +10,11 @@ import java.util.UUID;
 
 /**
  * DAO class for window_equipment 
- * 
- * @author abaghel
- *
  */
 @Repository
 public interface WindowEquipmentDataRepository extends CassandraRepository<WindowEquipmentData,UUID>{
 	
 	@Query("SELECT * FROM equipmentkeyspace.window_equipment WHERE recorddate = ?0 ALLOW FILTERING")
-	 Iterable<WindowEquipmentData> findEquipmentDataByDate(String date);
+	Iterable<WindowEquipmentData> findEquipmentDataByDate(String date);
 
 }

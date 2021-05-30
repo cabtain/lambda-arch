@@ -48,7 +48,7 @@ jQuery(document).ready(function() {
             //Total equipment
             var totalOutput='';
             jQuery.each(resp.totalEquipment, function(i,vh) {
-                 totalOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+(vh.totalSum/vh.totalCount).toFixed(2)+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
+                 totalOutput +="<tbody><tr><td>"+ vh.equipmentId+"</td><td>"+vh.sensorType+"</td><td>"+vh.totalCount+"</td><td>"+(vh.totalSum/vh.totalCount).toFixed(2)+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
             });
             var t_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Average</th><th>Time</th></tr></thead>";
             var t_tabl_end = "</table>";
@@ -57,7 +57,7 @@ jQuery(document).ready(function() {
             //Window equipment
             var windowOutput='';
             jQuery.each(resp.windowEquipment, function(i,vh) {
-                 windowOutput +="<tbody><tr><td>"+ vh.routeId+"</td><td>"+vh.vehicleType+"</td><td>"+vh.totalCount+"</td><td>"+(vh.totalSum/vh.totalCount).toFixed(2)+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
+                 windowOutput +="<tbody><tr><td>"+ vh.equipmentId+"</td><td>"+vh.sensorType+"</td><td>"+vh.totalCount+"</td><td>"+(vh.totalSum/vh.totalCount).toFixed(2)+"</td><td>"+vh.timeStamp+"</td></tr></tbody>";
             });
             var w_tabl_start = "<table class='table table-bordered table-condensed table-hover innerTable'><thead><tr><th>Equipment</th><th>Type</th><th>Count</th><th>Average</th><th>Time</th></tr></thead>";
             var w_tabl_end = "</table>";
@@ -78,38 +78,38 @@ jQuery(document).ready(function() {
 function drawBarChart(equipmentDetail,equipmentChartData){
     //Prepare data for equipment chart
     var chartLabel = ["Temperature", "Current", "Voltage", "Vibration", "Level"];
-    var routeName = ["Equipment_A", "Equipment_B", "Equipment_C"];
+    var equipmentName = ["Equipment_A", "Equipment_B", "Equipment_C"];
     var chartData0 =[0,0,0,0,0], chartData1 =[0,0,0,0,0], chartData2 =[0,0,0,0,0];
 
     jQuery.each(equipmentDetail, function(i,vh) {
 
-        if(vh.routeId == routeName[0]){
-            chartData0.splice(chartLabel.indexOf(vh.vehicleType),1,(vh.totalSum/vh.totalCount).toFixed(2));
+        if(vh.equipmentId == equipmentName[0]){
+            chartData0.splice(chartLabel.indexOf(vh.sensorType),1,(vh.totalSum/vh.totalCount).toFixed(2));
         }
-        if(vh.routeId == routeName[1]){
-            chartData1.splice(chartLabel.indexOf(vh.vehicleType),1,(vh.totalSum/vh.totalCount).toFixed(2));
+        if(vh.equipmentId == equipmentName[1]){
+            chartData1.splice(chartLabel.indexOf(vh.sensorType),1,(vh.totalSum/vh.totalCount).toFixed(2));
         }
-        if(vh.routeId == routeName[2]){
-            chartData2.splice(chartLabel.indexOf(vh.vehicleType),1,(vh.totalSum/vh.totalCount).toFixed(2));
+        if(vh.equipmentId == equipmentName[2]){
+            chartData2.splice(chartLabel.indexOf(vh.sensorType),1,(vh.totalSum/vh.totalCount).toFixed(2));
         }
     });
 
     var equipmentData = {
         labels : chartLabel,
         datasets : [{
-            label				  : routeName[0],
+            label				  : equipmentName[0],
             borderColor           : "#878BB6",
             backgroundColor       : "#878BB6",
             data                  : chartData0
         },
         {
-            label				  : routeName[1],
+            label				  : equipmentName[1],
             borderColor           : "#4ACAB4",
             backgroundColor       : "#4ACAB4",
             data                  : chartData1
         },
         {
-            label				  : routeName[2],
+            label				  : equipmentName[2],
             borderColor           : "#FFEA88",
             backgroundColor       : "#FFEA88",
             data                  : chartData2

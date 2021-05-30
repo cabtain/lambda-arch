@@ -85,8 +85,7 @@ public class StreamProcessor implements Serializable {
                     }
                     Dataset<Row> dataFrame = sql.createDataFrame(rdd, IoTData.class);
                     Dataset<Row> dfStore = dataFrame.selectExpr(
-                            "fuelLevel", "latitude", "longitude",
-                            "routeId", "speed", "timestamp", "vehicleId", "vehicleType",
+                            "equipmentId", "value", "timestamp", "eventId", "sensorType",
                             "metaData.fromOffset as fromOffset",
                             "metaData.untilOffset as untilOffset",
                             "metaData.kafkaPartition as kafkaPartition",
@@ -113,7 +112,7 @@ public class StreamProcessor implements Serializable {
         return this;
     }
 
-    public StreamProcessor filterVehicle() {
+    public StreamProcessor filterEquipment() {
         //We need filtered stream for total and Equipment data calculation
         var map = mapToPair(transformedStream);
         var key = reduceByKey(map);
@@ -130,7 +129,7 @@ public class StreamProcessor implements Serializable {
     }
 
     private JavaMapWithStateDStream<String, IoTData, Boolean, Tuple2<IoTData, Boolean>> mapWithState(final JavaPairDStream<String, IoTData> key) {
-        // Check vehicle Id is already processed
+        // Check equipment Id is already processed
         StateSpec<String, IoTData, Boolean, Tuple2<IoTData, Boolean>> stateFunc = StateSpec
                 .function(StreamProcessor::updateState)
                 .timeout(Durations.seconds(3600));//maintain state for one hour
@@ -147,7 +146,7 @@ public class StreamProcessor implements Serializable {
     }
 
     private JavaPairDStream<String, IoTData> mapToPair(final JavaDStream<IoTData> stream){
-        var dStream = stream.mapToPair(iot -> new Tuple2<>(iot.getVehicleId(), iot));
+        var dStream = stream.mapToPair(iot -> new Tuple2<>(iot.getEventId(), iot));
         dStream.print();
         return dStream;
     }

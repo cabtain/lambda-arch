@@ -7,80 +7,50 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
- * Class to represent the IoT vehicle data.
- *
- * @author abaghel
+ * Class to represent the IoT equipment data.
  */
-public class IoTData  implements Serializable {
-
-    private String vehicleId;
-    private String vehicleType;
-    private String routeId;
-    private String latitude;
-    private String longitude;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "IST")
-    private Date timestamp;
-    private double speed;
-    private double fuelLevel;
+public class IoTData implements Serializable{
+	
+	private String eventId;
+	private String equipmentId;
+	private String sensorType;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone="MST")
+	private Date timestamp;
+	private double value;
     private Map<String, String> metaData;
+	
+	public IoTData(){
+		
+	}
+	
+	public IoTData(String eventId, String equipmentId, String sensorType, Date timestamp, double value) {
+		super();
+		this.eventId = eventId;
+		this.equipmentId = equipmentId;
+		this.sensorType = sensorType;
+		this.timestamp = timestamp;
+		this.value = value;
+	}
 
-    public IoTData() {
+	public String getEventId() {
+		return eventId;
+	}
 
-    }
+	public String getEquipmentId() {
+		return equipmentId;
+	}
 
-    public IoTData(
-            String vehicleId,
-            String vehicleType,
-            String routeId,
-            String latitude,
-            String longitude,
-            Date timestamp,
-            double speed,
-            double fuelLevel
-    ) {
-        super();
-        this.vehicleId = vehicleId;
-        this.vehicleType = vehicleType;
-        this.routeId = routeId;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.timestamp = timestamp;
-        this.speed = speed;
-        this.fuelLevel = fuelLevel;
-    }
+	public String getSensorType() {
+		return sensorType;
+	}
 
-    public String getVehicleId() {
-        return vehicleId;
-    }
+	public Date getTimestamp() {
+		return timestamp;
+	}
 
-    public String getVehicleType() {
-        return vehicleType;
-    }
-
-    public String getRouteId() {
-        return routeId;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public double getFuelLevel() {
-        return fuelLevel;
-    }
-
+	public double getValue() {
+		return value;
+	}
 
     public void setMetaData(Map<String, String> metaData) {
         this.metaData = metaData;

@@ -37,74 +37,46 @@ public class IoTDataProducer {
     /**
      * Method runs in while loop and generates random IoT data in JSON with below format.
      * <p>
-     * {"vehicleId":"52f08f03-cd14-411a-8aef-ba87c9a99997","vehicleType":"Public Transport","routeId":"Equipment_A","latitude":",-85.583435","longitude":"38.892395","timestamp":1465471124373,"speed":80.0,"fuelLevel":28.0}
+     * {"eventId":"52f08f03-cd14-411a-8aef-ba87c9a99997","sensorType":"Temperature","routeId":"Equipment_A","timestamp":1465471124373,"value":80.0}
      *
      * @throws InterruptedException
      */
     private void generateIoTEvent(String topic) throws InterruptedException {
-        List<String> routeList = Arrays.asList(
+        List<String> equipmentList = Arrays.asList(
                 new String[]{"Equipment_A", "Equipment_B", "Equipment_C"}
         );
-        List<String> vehicleTypeList = Arrays.asList(
+        List<String> sensorTypeList = Arrays.asList(
                 new String[]{"Temperature", "Current", "Voltage", "Vibration", "Level"}
         );
         Random rand = new Random();
         logger.info("Sending events");
 
         while (true) {
-            List<IoTData> events = generateVehicleWithPositions(routeList, vehicleTypeList, rand);
-            for (IoTData event : events) {
-                producer.send(new KeyedMessage<>(topic, event));
-            }
-            Thread.sleep(rand.nextInt(3000 - 1000) + 1000);//random delay of 1 to 3 seconds
+            IoTData event = generateEquipmentData(equipmentList, sensorTypeList, rand);
+            producer.send(new KeyedMessage<>(topic, event));
+            Thread.sleep(rand.nextInt(300 - 100) + 100);//random delay of 0.1 to 0.3 seconds
         }
     }
 
-    private List<IoTData> generateVehicleWithPositions(
-            final List<String> routeList,
-            final List<String> vehicleTypeList,
+    private IoTData generateEquipmentData(
+            final List<String> equipmentList,
+            final List<String> sensorTypeList,
             final Random rand
     ) {
-        List<IoTData> eventList = new ArrayList<>();
-        String vehicleId = UUID.randomUUID().toString();
-        String vehicleType = vehicleTypeList.get(rand.nextInt(5));
-        String routeId = routeList.get(rand.nextInt(3));
+        String eventId = UUID.randomUUID().toString();
+        String equipmentId = equipmentList.get(rand.nextInt(3));
+        String sensorType = sensorTypeList.get(rand.nextInt(5));
         Date timestamp = new Date();
-        double speed = rand.nextInt(100 - 20) + 20;// random speed between 20 to 100
-        double fuelLevel = rand.nextInt(40 - 10) + 10;
-        for (int j = 0; j < 5; j++) {// Add 5 events for each vehicle (Moving)
-            String coords = getCoordinates(routeId);
-            IoTData event = new IoTData(
-                    vehicleId,
-                    vehicleType,
-                    routeId,
-                    coords.substring(0, coords.indexOf(",")),
-                    coords.substring(coords.indexOf(",") + 1),
-                    timestamp,
-                    speed,
-                    fuelLevel
-            );
-            eventList.add(event);
-        }
-        return eventList;
-    }
+        double value = rand.nextInt(100 - 10) + 10;// random speed between 10 to 100
 
-    //Method to generate random latitude and longitude for routes
-    private String getCoordinates(String routeId) {
-        Random rand = new Random();
-        int latPrefix = 53;
-        int longPrefix = -6;
-        if (routeId.equals("Equipment_A")) {
-            longPrefix = -6;
-        }
-        if (routeId.equals("Equipment_B")) {
-            longPrefix = -7;
-        }
-        if (routeId.equals("Equipment_C")) {
-            longPrefix = -8;
-        }
-        Float latitude = latPrefix + rand.nextFloat();
-        Float longitude = longPrefix + rand.nextFloat();
-        return latitude + "," + longitude;
+        IoTData event = new IoTData(
+                eventId,
+                equipmentId,
+                sensorType,
+                timestamp,
+                value
+        );
+
+        return event;
     }
 }
